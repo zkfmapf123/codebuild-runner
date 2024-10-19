@@ -34,7 +34,8 @@ resource "aws_iam_policy" "codebuild_policy" {
         "Action" : [
           "codeconnections:GetConnectionToken",
           "codeconnections:GetConnection",
-          "ecr:Get*"
+          "ecr:Get*",
+          "ecr:InitiateLayerUpload"
         ],
         "Resource" : [
           "*"
