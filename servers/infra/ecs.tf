@@ -87,3 +87,25 @@ resource "aws_ecs_service" "ecs_svc" {
     container_port = 3000
   }
 }
+
+resource "aws_lb_listener_rule" "lb_listener" {
+  listener_arn = aws_lb_listener.listen_443.arn
+  priority = 100
+  
+  action {
+    type = "forward"
+    target_group_arn = aws_lb_target_group.server_ecs_tg.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/"]
+    }
+  }
+
+  condition {
+    host_header  {
+      values = ["svc.leedonggyu.com"]
+    }
+  }
+}

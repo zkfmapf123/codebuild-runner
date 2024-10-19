@@ -28,7 +28,9 @@ resource "aws_iam_policy" "ecs_task_policy" {
         "Action" : [
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
+          "ecr:GetAuthorizationToken",
           "logs:CreateLogStream",
+          "logs:CreateLogGroup",
           "logs:PutLogEvents"
         ],
         "Resource" : "*"
