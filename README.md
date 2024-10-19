@@ -85,6 +85,7 @@ Failed to create webhook. GitHub API limit reached or permission issue encounter
 ```
 
 - Gtihub Webhook 설정진행해야 함
+- <b>settings에서 Content-Type을 application/json 으로 진행해야 함</b>
 ![pr-1](./public/pr-1.png)
 ![p2-2](./public/pr-2.png)
 
