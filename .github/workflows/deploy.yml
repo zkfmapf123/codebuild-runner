@@ -49,10 +49,10 @@ jobs:
         id: build
         env:
           ECR_REPOSITORY: ${{ env.ECR_REPO }}
-          IMAGE_TAG: v1.0.0.${{ steps.vars.outputs.short_sha }} ## not used
+          IMAGE_TAG: v1.0.0.${{ steps.vars.outputs.short_sha }}
         run: |
             ls -al
-
+            cd server
             docker build -t $ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REPOSITORY:latest .
             docker push $ECR_REPOSITORY:$IMAGE_TAG
             docker push $ECR_REPOSITORY:latest
