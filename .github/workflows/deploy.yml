@@ -1,4 +1,5 @@
 name: HelloWorld app
+
 on:
   repository_dispatch:
     types: [webhook_triggered]
@@ -50,8 +51,8 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO }}
           IMAGE_TAG: v1.0.0.${{ steps.vars.outputs.short_sha }} ## not used
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker build -t $ECR_REPOSITORY:latest .
+          docker push $ECR_REPOSITORY:latest
         working-directory: ./servers
     outputs:
       image_tag: ${{ steps.build.outputs.image_tag }}
