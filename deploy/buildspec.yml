@@ -1,9 +1,36 @@
 version: 0.2
 
+env:
+  # variables:
+  #   JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+  # parameter-store:
+  #   LOGIN_PASSWORD: /CodeBuild/dockerLoginPassword
+
 phases:
+  runs-on:
+    - codebuild-runner-${{ github.run_id }}-${{ github.run_attempt }}
+    - buildspec-override:true
+  install:
+    commands:
+      - echo Entered the install phase...
+    finally:
+      - echo This always runs even if the update or install command fails 
+  pre_build:
+    commands:
+      - echo Entered the pre_build phase...
+      # - docker login -u User -p $LOGIN_PASSWORD
+    finally:
+      - echo This always runs even if the login command fails 
   build:
     commands:
-      - echo "hello world"
+      - echo Entered the build phase...
+      - echo Build started on `date`
+    finally:
+      - echo This always runs even if the install command fails
   post_build:
     commands:
-      - echo "post build"
+      - echo Entered the post_build phase...
+      - echo Build completed on `date`
+
+  paths:
+    - '/root/.m2/**/*'

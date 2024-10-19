@@ -23,7 +23,32 @@ data "aws_iam_policy" "codebuild_admin" {
   name = "AWSCodeBuildAdminAccess"
 }
 
+resource "aws_iam_policy" "codebuild_policy" {
+  name = "codeconnection_policy"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "codeconnections:GetConnectionToken",
+          "codeconnections:GetConnection"
+        ],
+        "Resource" : [
+          "*"
+        ]
+      }
+    ]
+  })
+}
+
 resource "aws_iam_role_policy_attachment" "codebuild_attach" {
   role       = aws_iam_role.codebuild_role.id
   policy_arn = data.aws_iam_policy.codebuild_admin.arn
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild_attach_2" {
+  role = aws_iam_role.codebuild_role.id
+  policy_arn = aws_iam_policy.codebuild_policy.arn
 }
