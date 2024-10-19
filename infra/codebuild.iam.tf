@@ -101,7 +101,7 @@ resource "aws_iam_policy" "codebuild_ecs_policy" {
 }
 
 resource "aws_iam_policy" "codebuild_passrole_policy" {
-  name = "codebuild_ecs_policy"
+  name = "codebuild_ecs_passrole_policy"
 
   policy = jsonencode({
     "Version" : "2012-10-17",

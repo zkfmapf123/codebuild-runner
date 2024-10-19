@@ -8,7 +8,8 @@
 - [x] GithubAction에서 Docker Layer Cache 검증하기
   - CodeBuild DockerLayerCached
   - Docker build --cache-from
-- [ ] Terraform으로 만들기
+- [x] Terraform으로 만들기
+  - infra/codebuild.tf
 
 ## VPC + ALB + ECS
 
