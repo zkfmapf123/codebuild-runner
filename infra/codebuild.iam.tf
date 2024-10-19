@@ -33,7 +33,8 @@ resource "aws_iam_policy" "codebuild_policy" {
         "Effect" : "Allow",
         "Action" : [
           "codeconnections:GetConnectionToken",
-          "codeconnections:GetConnection"
+          "codeconnections:GetConnection",
+          "ecr:Get*"
         ],
         "Resource" : [
           "*"
