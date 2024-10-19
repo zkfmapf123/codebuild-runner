@@ -1,60 +1,51 @@
-# CodeBuild Runner
+# CICD CodeBuild Architecture
 
-## Tech / Todo...
+![archi](./public/archi.png)
 
-- CodeBuild + Github Action
-- Codeguru Reviewer
-- Configuration Server Repository / Build Repository 
-- Make Terraform
+## Todo...
 
-## 1. ECS + ALB 생성
+- CodeBuild와 Github Action을 통합해서 사용하기
+- GithubAction에서 Docker Layer Cached 검증하기
+- CodeGuru Reviewer를 활용해서 CI 검사받기
+- Terraform으로 만들기
 
-- VPC는 이미 만들었음
+## VPC + ALB + ECS
 
 ```sh
 
     cd infra
     terraform init && terraform apply --auto-approve
-
-    ## svc.leedonggyu.com 으로 통신
 ```
 
-## 2. Codebuild + Runner 구성
+## CodeBuild + Action runner 통합하기
 
-### 만들기 전 전제조건...
-
-- Codebuild는 Private Subnet에 위치 함 (NAT 존재해야 함)
-
-### IAM 생성
+> CodeBuild 전용 IAM 구축
 
 ```sh
-## 해당 코드 참조
-infra/codebuild.iam.tf
+    cd infra/codebuild.iam.tf
 ```
 
-### Webhook 이벤트 정의
+> CodeBuild 구축하기 => Git Repository 연결
 
-| 이벤트 유형 | action 값 |
-|----------|----------|
-| PULL_REQUESET_CREATED    | 없음     |
-| PULL_REQUEST_UPDATED    | opened    |
-| PULL_REQUEST_REOPENED   | reopened     |
-| PULL_REQUEST_MERGED   | closed, 그리고 merged=true     |
-| PULL_REQUEST_CLOSED   | closed, 그리고 merged=false     |
-| WORKFLOW_JOB_QUEUED   | 대기     |
-| RELEASED   | 출시     |
-| PRERELEASED   | 사전 출시     |
+![1](./public/1.png)
 
-- <a href="https://docs.aws.amazon.com/ko_kr/codebuild/latest/userguide/github-webhook-events-console.html"> CodeBuild Webhook Event Filtering </a>
+> CodeBuild 구축하기 => Webhook 연결하기
 
-### Github Action Webhook 통합
+- Webhook을 연동하면 buildspec.yml이 아닌, Action workflows.yml을 사용하게된다.
+- 완료 후 URL / Token을 활용하여 Github Webhook을 등록한다
 
-- Github Webhook을 사용한다면 buildspec.yml은 사용하지 않고, <b>action workflows를 활용하게 된다.</b>
-- 잘 동작한다면 아래와 같은 화면이 나와야 한다 (codeBuild / Github Runner 등록화면)
+```sh
+    Content-Type: "application/json"
+```
+
+> CodeBuild 잘 동작하는지 확인하기
+
+- master push 후 2개의 화면이 나와야 한다.
+- CodeBuild 내 터미널 동작
+- Github Action내 터미널 동작
 
 ![so-1](./public/so-1.png)
 ![so-2](./public/so-2.png)
-
 
 ## Issue
 
