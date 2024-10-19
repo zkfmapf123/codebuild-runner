@@ -59,8 +59,8 @@ jobs:
       - name: Build Image And Push ECR
         id: deploy
         env:
-          CLUSTER: ${{ env.CLUSTER }}
-          SERVICE: ${{ env.SERVICE }}
+          CLUSTER: ${{ env.ECS_CLUSTER }}
+          SERVICE: ${{ env.ECS_SERVICE }}
           TASK : ${{ env.TASK_DEF }}
         run: |
             ls -al

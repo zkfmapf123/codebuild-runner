@@ -5,8 +5,9 @@
 ## Todo...
 
 - [x] CodeBuild와 Github Action을 통합해서 사용하기
-- [ ] GithubAction에서 Docker Layer Cache 검증하기
-- [ ] CodeGuru Reviewer를 활용해서 CI 검사받기
+- [x] GithubAction에서 Docker Layer Cache 검증하기
+  - CodeBuild DockerLayerCached
+  - Docker build --cache-from
 - [ ] Terraform으로 만들기
 
 ## VPC + ALB + ECS
