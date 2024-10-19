@@ -13,13 +13,25 @@
 
 ```sh
 
-    cd server/infra
+    cd infra
     terraform init && terraform apply --auto-approve
 
     ## svc.leedonggyu.com 으로 통신
 ```
 
 ## 2. Codebuild + Runner 구성
+
+### 만들기 전 전제조건...
+
+- Codebuild는 Private Subnet에 위치 함 (NAT 존재해야 함)
+
+### IAM 생성
+
+```sh
+## 해당 코드 참조
+infra/codebuild.iam.tf
+```
+
 
 ## ...
 

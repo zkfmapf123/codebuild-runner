@@ -7,7 +7,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 }
 
 resource "aws_ecs_task_definition" "task_def" {
-  family = "service"
+  family             = "service"
   execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
     {
@@ -36,7 +36,7 @@ resource "aws_ecs_task_definition" "task_def" {
   ])
 
   runtime_platform {
-    cpu_architecture        = "ARM64"
+    cpu_architecture = "ARM64"
   }
 
   requires_compatibilities = ["FARGATE"]
@@ -51,9 +51,9 @@ resource "aws_security_group" "ecs_sg" {
   vpc_id      = local.vpc_id
 
   ingress {
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "tcp"
+    from_port       = 3000
+    to_port         = 3000
+    protocol        = "tcp"
     security_groups = [aws_security_group.lb_sg.id]
   }
 
@@ -66,34 +66,38 @@ resource "aws_security_group" "ecs_sg" {
 }
 
 resource "aws_ecs_service" "ecs_svc" {
-  name = "server"
-  cluster= aws_ecs_cluster.ecs_cluster.id
+  name            = "server"
+  cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.task_def.arn
-  desired_count = 1
+  desired_count   = 1
 
   # iam_role = aws_iam_role.ecs_service_role.arn
-  launch_type = "FARGATE"
+  launch_type      = "FARGATE"
   platform_version = "LATEST"
 
   network_configuration {
-    subnets = values(local.was_subnets)
-    security_groups = [aws_security_group.ecs_sg.id]
+    subnets          = values(local.was_subnets)
+    security_groups  = [aws_security_group.ecs_sg.id]
     assign_public_ip = false
   }
 
   load_balancer {
     target_group_arn = aws_lb_target_group.server_ecs_tg.arn
-    container_name = "svc"
-    container_port = 3000
+    container_name   = "svc"
+    container_port   = 3000
+  }
+
+  lifecycle {
+    ignore_changes = [task_definition]
   }
 }
 
 resource "aws_lb_listener_rule" "lb_listener" {
   listener_arn = aws_lb_listener.listen_443.arn
-  priority = 100
-  
+  priority     = 100
+
   action {
-    type = "forward"
+    type             = "forward"
     target_group_arn = aws_lb_target_group.server_ecs_tg.arn
   }
 
@@ -104,7 +108,7 @@ resource "aws_lb_listener_rule" "lb_listener" {
   }
 
   condition {
-    host_header  {
+    host_header {
       values = ["svc.leedonggyu.com"]
     }
   }
