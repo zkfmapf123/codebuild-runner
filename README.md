@@ -47,6 +47,15 @@ infra/codebuild.iam.tf
 
 - <a href="https://docs.aws.amazon.com/ko_kr/codebuild/latest/userguide/github-webhook-events-console.html"> CodeBuild Webhook Event Filtering </a>
 
+### Github Action Webhook 통합
+
+- Github Webhook을 사용한다면 buildspec.yml은 사용하지 않고, <b>action workflows를 활용하게 된다.</b>
+- 잘 동작한다면 아래와 같은 화면이 나와야 한다 (codeBuild / Github Runner 등록화면)
+
+![so-1](./public/so-1.png)
+![so-2](./public/so-2.png)
+
+
 ## Issue
 
 ### CodeGuru Not ap-northeast-2
