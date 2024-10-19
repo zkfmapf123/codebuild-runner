@@ -2,4 +2,4 @@
 .terraform.lock.hcl
 node_modules
 
-deploy
+deploy/deploy.sh
