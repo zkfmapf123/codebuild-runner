@@ -35,7 +35,11 @@ resource "aws_iam_policy" "codebuild_policy" {
           "codeconnections:GetConnectionToken",
           "codeconnections:GetConnection",
           "ecr:Get*",
-          "ecr:InitiateLayerUpload"
+          "ecr:Put*",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:BatchCheckLayerAvailability",
         ],
         "Resource" : [
           "*"
@@ -45,12 +49,89 @@ resource "aws_iam_policy" "codebuild_policy" {
   })
 }
 
+resource "aws_iam_policy" "codebuild_ecr_policy" {
+  name = "codebuild_ecr_policy"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ecr:Get*",
+          "ecr:Put*",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:BatchCheckLayerAvailability",
+        ],
+        "Resource" : [
+          "*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "codebuild_ecs_policy" {
+  name = "codebuild_ecs_policy"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ecs:DescribeServices",
+          "ecs:DescribeTaskDefinition",
+          "ecs:DescribeTasks",
+          "ecs:ListClusters",
+          "ecs:ListServices",
+          "ecs:ListTasks",
+          "ecs:RegisterTaskDefinition",
+          "ecs:UpdateService",
+          "iam:PassRole"
+        ],
+        "Resource" : [
+          "*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "codebuild_passrole_policy" {
+  name = "codebuild_ecs_policy"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "iam:PassRole"
+        ],
+        "Resource" : [
+          "*"
+        ]
+      }
+    ]
+  })
+}
+
+
+
 resource "aws_iam_role_policy_attachment" "codebuild_attach" {
   role       = aws_iam_role.codebuild_role.id
   policy_arn = data.aws_iam_policy.codebuild_admin.arn
 }
 
-resource "aws_iam_role_policy_attachment" "codebuild_attach_2" {
-  role = aws_iam_role.codebuild_role.id
-  policy_arn = aws_iam_policy.codebuild_policy.arn
+resource "aws_iam_role_policy_attachment" "codebuild_attachs" {
+  for_each = {
+    for i, v in [aws_iam_policy.codebuild_policy, aws_iam_policy.codebuild_ecr_policy, aws_iam_policy.codebuild_ecs_policy, aws_iam_policy.codebuild_passrole_policy] :
+    i => v
+  }
+
+  role       = aws_iam_role.codebuild_role.id
+  policy_arn = each.value.arn
 }

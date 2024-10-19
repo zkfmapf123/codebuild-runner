@@ -67,7 +67,7 @@ jobs:
             cd deploy
 
             aws ecs register-task-definition --cli-input-json file://task_def.json
-            aws ecs update-service --cluster $CLUSTER --service $SERVICE --task-definition $$TASK
+            aws ecs update-service --cluster $CLUSTER --service $SERVICE --task-definition $TASK
         
     outputs:
       image_tag: ${{ steps.build.outputs.image_tag }}
